@@ -13,7 +13,15 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
-      - uses: ../actions/build
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+      - name: Build Backend application
+        if: steps.filter.outputs.backend == 'true'
+        uses: ./.github/actions/build
         with:
           application: backend
           docker_image_tag: mtararujs/webapp-backend
@@ -22,11 +30,19 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout the code
-        uses: ../actions/checkout@v4
-      - uses: ../actions/build
+        uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
         with:
-          application: backend
-          docker_image_tag: mtararujs/webapp-backend
+          filters: |
+            frontend:
+              - 'frontend/**'
+      - name: Build Frontend application
+        if: steps.filter.outputs.frontend == 'true'
+        uses: ./.github/actions/build
+        with:
+          application: frontend
+          docker_image_tag: mtararujs/webapp-frontend
   deploy-backened-dev:
     name: Delploy Backend to Kubernetes DEV
     runs-on: self-hosted
