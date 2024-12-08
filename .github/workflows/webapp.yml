@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
-      - uses: ./.github/actions/build
+      - uses: ../actions/build
         with:
           application: backend
           docker_image_tag: mtararujs/webapp-backend
@@ -22,8 +22,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v4
-      - uses: ./.github/actions/build
+        uses: ../actions/checkout@v4
+      - uses: ../actions/build
         with:
           application: backend
           docker_image_tag: mtararujs/webapp-backend
